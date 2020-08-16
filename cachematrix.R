@@ -1,15 +1,35 @@
-## Put comments here that give an overall description of what your
-## functions do
+## These functions find the inverse of a square matrix, which is typically an
+## operation that takes a long time and lots of memory. Hence, once the inverse 
+## is solved once, the result is cached in memory, avoiding the need to re-run
+## the memory intensive calculation next time.
 
-## Write a short comment describing this function
+## The first function sets the matrix in the form of a list of functions.
 
 makeCacheMatrix <- function(x = matrix()) {
-
+        f <- NULL
+        set <- function(y){
+                x <<- y
+                q <<- NULL
+        }
+        get <- function() x
+        setinv <- function(inv) f <<- inv
+        getinv <- function() f
+        list(set = set, get = get, setinv = setinv, getinv = getinv)
 }
 
 
-## Write a short comment describing this function
+## This second function finds the inverse of the matrix using the solve() 
+## function and cache this value. However, if the inverse is already found, it 
+## will print the cached value.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        f <- x$getinv()
+        if(!is.null(f)){
+                message("Getting the cached data")
+                return(f)
+        }
+        data <- x$get()
+        f <- solve(data, ...)
+        x$setinv(f)
+        f
 }
